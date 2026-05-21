@@ -1,6 +1,8 @@
 ---
 import "../styles/global.css";
 import GitHub from "../icons/gitHub.astro";
+
+const API_BASE = import.meta.env.PUBLIC_API_BASE || "";
 ---
 
 <html lang="en">
@@ -1276,8 +1278,9 @@ import GitHub from "../icons/gitHub.astro";
             <h4>Resources</h4>
             <ul>
               <li>
-                <a href="http://127.0.0.1:8000/docs#/" target="_blank"
-                  >API Documentation</a
+                <a
+                  href={`${API_BASE}/docs`}
+                  target="_blank">API Documentation</a
                 >
               </li>
             </ul>
@@ -1316,6 +1319,8 @@ import GitHub from "../icons/gitHub.astro";
       let testHistory = [];
       let videoStream = null;
       let configData = null;
+
+      const API_BASE = import.meta.env.PUBLIC_API_BASE || "";
 
       // DOM Elements
       const themeToggleBtn = document.getElementById("theme-toggle");
@@ -1395,7 +1400,7 @@ import GitHub from "../icons/gitHub.astro";
       // --- Config Fetching & Scale UI ---
       async function fetchConfig() {
         try {
-          const res = await fetch("/api/config");
+          const res = await fetch(`${API_BASE}/api/config`);
           if (res.ok) {
             configData = await res.json();
             renderScaleGuide(configData.reference_scale);
@@ -1619,7 +1624,7 @@ import GitHub from "../icons/gitHub.astro";
           phVal.innerText = "...";
           resultPanel.style.display = "block";
 
-          const res = await fetch("/api/analyze", {
+          const res = await fetch(`${API_BASE}/api/analyze`, {
             method: "POST",
             body: formData,
           });
