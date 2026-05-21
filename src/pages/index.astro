@@ -1,0 +1,1893 @@
+---
+import "../styles/global.css";
+import GitHub from "../icons/gitHub.astro";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- SEO Meta Tags -->
+    <title>pH Detection | Water Quality Analysis</title>
+    <meta
+      name="description"
+      content="Instant pH detection of liquids using AI-powered image recognition of red cabbage indicators. Upload or capture photos and track pH levels over time."
+    />
+
+    <style>
+      /* Page specific styles */
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 0;
+        margin-bottom: 40px;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-display);
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: var(--radius-sm);
+        background: var(--primary-light);
+        color: var(--primary);
+      }
+
+      .logo-text span {
+        display: block;
+        font-size: 11px;
+        font-weight: 500;
+        color: var(--text-tertiary);
+        margin-top: -4px;
+      }
+
+      nav {
+        display: flex;
+        gap: 32px;
+      }
+
+      nav a {
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      nav a:hover {
+        color: var(--primary);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        transition: background-color 0.2s ease;
+      }
+
+      .theme-toggle:hover {
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+
+      /* Hero Section */
+      .hero {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 60px;
+        animation: fadeIn 0.5s ease-out forwards;
+      }
+
+      .hero-badge {
+        margin-bottom: 20px;
+      }
+
+      .hero h1 {
+        font-size: 52px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin-bottom: 24px;
+        background: linear-gradient(
+          135deg,
+          var(--text-primary) 30%,
+          var(--primary) 90%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .hero p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+
+      .metrics {
+        display: flex;
+        justify-content: center;
+        gap: 60px;
+        margin-top: 40px;
+      }
+
+      .metric-item {
+        text-align: center;
+      }
+
+      .metric-value {
+        font-family: var(--font-display);
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--text-primary);
+        line-height: 1;
+      }
+
+      .metric-label {
+        font-size: 12px;
+        color: var(--text-tertiary);
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-top: 4px;
+      }
+
+      /* Dashboard Layout */
+      .dashboard {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 32px;
+        margin-bottom: 80px;
+      }
+
+      @media (max-width: 900px) {
+        .dashboard {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--card-border);
+      }
+
+      .card-header h2 {
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .card-header p {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      .card-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+      }
+
+      .dashboard-card {
+        padding: 32px;
+        height: fit-content;
+      }
+
+      /* File upload / canvas region */
+      .upload-zone {
+        border: 2px dashed var(--card-border);
+        border-radius: var(--radius-md);
+        padding: 48px 24px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: rgba(243, 246, 250, 0.3);
+      }
+
+      .upload-zone:hover {
+        border-color: var(--primary);
+        background-color: var(--primary-light);
+      }
+
+      .upload-icon {
+        font-size: 40px;
+        color: var(--text-tertiary);
+        margin-bottom: 16px;
+      }
+
+      .upload-title {
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 8px;
+      }
+
+      .upload-desc {
+        font-size: 13px;
+        color: var(--text-secondary);
+        max-width: 320px;
+        margin: 0 auto;
+      }
+
+      /* Camera controls */
+      .camera-btn-container {
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .camera-container {
+        position: relative;
+        width: 100%;
+        max-height: 400px;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        margin-bottom: 20px;
+        background: #000;
+        display: none;
+      }
+
+      .camera-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .camera-overlay {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+      }
+
+      /* Active Canvas Viewer */
+      .viewer-container {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .canvas-wrapper {
+        position: relative;
+        max-width: 100%;
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+        cursor: crosshair;
+        background-color: #000;
+      }
+
+      .canvas-wrapper canvas {
+        display: block;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .canvas-instructions {
+        margin-top: 16px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      /* Result Display Styling */
+      .result-panel {
+        display: none;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid var(--card-border);
+        width: 100%;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .result-title {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+
+      .result-flex {
+        display: flex;
+        gap: 32px;
+        align-items: center;
+      }
+
+      @media (max-width: 580px) {
+        .result-flex {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+        }
+      }
+
+      .ph-gauge {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        box-shadow: var(--shadow-lg);
+        position: relative;
+      }
+
+      .ph-gauge-value {
+        font-family: var(--font-display);
+        font-size: 40px;
+        font-weight: 800;
+        line-height: 1;
+      }
+
+      .ph-gauge-label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        opacity: 0.8;
+      }
+
+      .result-details {
+        flex: 1;
+      }
+
+      .classification-badge {
+        display: inline-flex;
+        font-weight: 700;
+        font-size: 13px;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        margin-bottom: 12px;
+      }
+
+      .color-comparison {
+        display: flex;
+        gap: 16px;
+        margin: 12px 0;
+      }
+
+      .comparison-swatch {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .swatch-circle {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        border: 1px solid var(--card-border);
+      }
+
+      /* Log list and graph inside Recent Tests */
+      .history-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 48px 16px;
+        text-align: center;
+        color: var(--text-tertiary);
+      }
+
+      .history-empty-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+      }
+
+      .history-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .history-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px;
+        border-radius: var(--radius-md);
+        background-color: var(--bg-secondary);
+        border: 1px solid var(--card-border);
+        transition: transform 0.2s ease;
+      }
+
+      .history-item:hover {
+        transform: translateX(2px);
+      }
+
+      .history-info h4 {
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .history-info p {
+        font-size: 11px;
+        color: var(--text-tertiary);
+      }
+
+      .history-badge {
+        font-family: var(--font-display);
+        font-size: 14px;
+        font-weight: 800;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+      }
+
+      .history-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .btn-delete {
+        background: none;
+        border: none;
+        color: transparent;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-delete:hover {
+        color: var(--ph-acid);
+        background-color: rgb(251, 189, 189) !important;
+      }
+
+      .graph-container {
+        margin-bottom: 24px;
+        display: none;
+        padding: 16px 12px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02) 0%,
+          rgba(37, 99, 235, 0.01) 100%
+        );
+        border: 1px dashed var(--card-border);
+      }
+
+      /* Input form for saving test */
+      .save-test-form {
+        margin-top: 16px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .save-test-form input {
+        flex: 1;
+        background: var(--bg-secondary);
+        border: 1px solid var(--card-border);
+        padding: 8px 16px;
+        border-radius: 9999px;
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        font-size: 14px;
+        outline: none;
+      }
+
+      .save-test-form input:focus {
+        border-color: var(--primary);
+      }
+
+      /* Tips list container */
+      .tips-container {
+        margin-top: 24px;
+        padding: 24px;
+        border-radius: var(--radius-md);
+        background-color: var(--primary-light);
+        border: 1px solid rgba(37, 99, 235, 0.1);
+      }
+
+      .tips-container h3 {
+        font-size: 15px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+      }
+
+      .tips-list {
+        list-style-type: none;
+        padding-left: 0;
+      }
+
+      .tips-list li {
+        font-size: 13px;
+        color: var(--text-secondary);
+        position: relative;
+        padding-left: 20px;
+        margin-bottom: 8px;
+      }
+
+      .tips-list li::before {
+        content: "•";
+        position: absolute;
+        left: 6px;
+        color: var(--primary);
+        font-weight: bold;
+      }
+
+      /* Features grid */
+      .why-section {
+        margin-bottom: 80px;
+      }
+
+      .why-header {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 40px;
+      }
+
+      .why-header h2 {
+        font-size: 32px;
+        margin-bottom: 12px;
+      }
+
+      .why-header p {
+        color: var(--text-secondary);
+        font-size: 15px;
+      }
+
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+      }
+
+      @media (max-width: 768px) {
+        .features-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .feature-card {
+        padding: 24px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--card-border);
+        background-color: var(--card-bg);
+      }
+
+      .feature-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: var(--radius-sm);
+        background-color: var(--bg-secondary);
+        color: var(--text-primary);
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+
+      .feature-card h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+
+      .feature-card p {
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid var(--card-border);
+        padding: 60px 0 24px;
+        margin-top: 80px;
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      @media (max-width: 768px) {
+        .footer-grid {
+          grid-template-columns: 1fr;
+          gap: 24px;
+        }
+      }
+
+      .footer-brand p {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin: 16px 0;
+        max-width: 280px;
+      }
+
+      .footer-col h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .footer-col ul {
+        list-style: none;
+      }
+
+      .footer-col ul li {
+        margin-bottom: 8px;
+      }
+
+      .footer-col ul li a {
+        color: var(--text-secondary);
+        font-size: 13px;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-col ul li a:hover {
+        color: var(--primary);
+      }
+
+      .social-links {
+        display: flex;
+        gap: 12px;
+      }
+
+      .social-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: all 0.2s ease;
+      }
+
+      .social-icon:hover {
+        background-color: var(--text-primary);
+        color: var(--bg-primary);
+      }
+
+      .sub-footer {
+        border-top: 1px solid var(--card-border);
+        padding-top: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: var(--text-tertiary);
+      }
+
+      .sub-footer-links {
+        display: flex;
+        gap: 24px;
+      }
+
+      .sub-footer-links a {
+        color: var(--text-tertiary);
+        text-decoration: none;
+      }
+
+      .sub-footer-links a:hover {
+        color: var(--primary);
+      }
+
+      /* Guide scale UI */
+      .guide-scale {
+        display: flex;
+        height: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 16px 0;
+        border: 1px solid var(--card-border);
+      }
+
+      .guide-scale-step {
+        flex: 1;
+        height: 100%;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .guide-scale-step:hover::after {
+        content: attr(data-ph);
+        position: absolute;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text-primary);
+        color: var(--bg-primary);
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Main Content Container -->
+    <div class="container animate-fade-in">
+      <!-- HEADER -->
+      <header>
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path
+                d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"
+              ></path>
+            </svg>
+          </div>
+          <div class="logo-text">
+            pH Detection
+            <span>Water Quality Analysis</span>
+          </div>
+        </a>
+
+        <nav>
+          <a href="#how-it-works">How It Works</a>
+          <a href="#guide">pH Guide</a>
+          <a href="#footer">About</a>
+        </nav>
+
+        <div class="header-actions">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Toggle dark mode"
+          >
+            <!-- Light mode icon -->
+            <svg
+              id="theme-light-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="display: none;"
+            >
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Dark mode icon -->
+            <svg
+              id="theme-dark-icon"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <a href="#analyzer-section" class="btn btn-primary">Get Started</a>
+        </div>
+      </header>
+
+      <!-- HERO SECTION -->
+      <section class="hero">
+        <div class="hero-badge">
+          <span class="badge badge-ai">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              style="margin-right: 4px;"
+            >
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+              ></path>
+            </svg>
+            AI-Powered Water Analysis
+          </span>
+        </div>
+        <h1>Instant pH Detection for<br />Clean Water</h1>
+        <p>
+          Upload or capture an image of your pH test solution using red cabbage
+          indicator and get accurate results instantly. Track your water quality
+          over time with our smart tagging system.
+        </p>
+
+        <div class="metrics">
+          <div class="metric-item">
+            <div class="metric-value">99%</div>
+            <div class="metric-label">Accuracy</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value">2s</div>
+            <div class="metric-label">Analysis Time</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-value">Free</div>
+            <div class="metric-label">Forever</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIN DASHBOARD -->
+      <section id="analyzer-section" class="dashboard">
+        <!-- Left: Upload & Analyze -->
+        <div class="glass-card dashboard-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
+                ></path>
+              </svg>
+            </div>
+            <div>
+              <h2>Analyze pH Level</h2>
+              <p>Upload or capture a pH test image</p>
+            </div>
+          </div>
+
+          <!-- Camera video container -->
+          <div class="camera-container" id="camera-container">
+            <video class="camera-video" id="camera-video" autoplay playsinline
+            ></video>
+            <div class="camera-overlay">
+              <button class="btn btn-primary" id="btn-capture"
+                >Capture Photo</button
+              >
+              <button class="btn btn-secondary" id="btn-cancel-camera"
+                >Cancel</button
+              >
+            </div>
+          </div>
+
+          <div class="camera-btn-container" id="camera-btn-container">
+            <button class="btn btn-secondary" id="btn-use-camera">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                style="margin-right: 4px;"
+              >
+                <path
+                  d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"
+                ></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+              Use Camera
+            </button>
+          </div>
+
+          <!-- Upload dropzone -->
+          <div class="upload-zone" id="drop-zone">
+            <div class="upload-icon">
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+              >
+                <path d="M12 5v14M5 12h14" stroke-linecap="round"></path>
+              </svg>
+            </div>
+            <div class="upload-title">Upload pH Test Image</div>
+            <div class="upload-desc">
+              Drag & drop your pH test image here, or click to browse. Works
+              best with Red Cabbage indicator solutions.
+            </div>
+            <input
+              type="file"
+              id="file-input"
+              accept="image/*"
+              style="display: none;"
+            />
+          </div>
+
+          <!-- Active image viewer -->
+          <div class="viewer-container" id="viewer-container">
+            <div class="canvas-wrapper">
+              <canvas id="image-canvas"></canvas>
+            </div>
+            <div class="canvas-instructions">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 16v-4M12 8h.01"></path>
+              </svg>
+              Tap/Click the colored liquid area on the image to sample pH
+            </div>
+            <button
+              class="btn btn-outline"
+              id="btn-reset-image"
+              style="margin-top: 16px;">Upload Different Image</button
+            >
+          </div>
+
+          <!-- Result section -->
+          <div class="result-panel" id="result-panel">
+            <h3 class="result-title">Analysis Result</h3>
+            <div class="result-flex">
+              <div class="ph-gauge" id="ph-gauge">
+                <div class="ph-gauge-value" id="ph-val">-</div>
+                <div class="ph-gauge-label">pH</div>
+              </div>
+
+              <div class="result-details">
+                <span class="classification-badge" id="class-badge"
+                  >Neutral</span
+                >
+                <p
+                  id="result-desc"
+                  style="font-size: 14px; color: var(--text-secondary); line-height: 1.5;"
+                >
+                  Calculated acidity or alkalinity indicator based on your red
+                  cabbage extraction scale.
+                </p>
+
+                <div class="color-comparison">
+                  <div class="comparison-swatch">
+                    <div class="swatch-circle" id="swatch-sampled"></div>
+                    <span>Sampled Color</span>
+                  </div>
+                  <div class="comparison-swatch">
+                    <div class="swatch-circle" id="swatch-matched"></div>
+                    <span>Matched Reference</span>
+                  </div>
+                </div>
+
+                <!-- Save form -->
+                <form class="save-test-form" id="save-test-form">
+                  <input
+                    type="text"
+                    id="test-tag"
+                    placeholder="Name this sample (e.g. Tap Water)"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    style="padding: 8px 16px;">Save Test</button
+                  >
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help tips -->
+          <div class="tips-container">
+            <h3>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V7h2z"
+                ></path>
+              </svg>
+              Tips for Best Results
+            </h3>
+            <ul class="tips-list">
+              <li>
+                Ensure good, even lighting conditions (natural lighting is
+                ideal; avoid harsh yellow spotlights or heavy shadows).
+              </li>
+              <li>
+                Place the liquid glass/container on a clean white background
+                (e.g. white sheet of paper) to contrast the color.
+              </li>
+              <li>
+                Ensure the liquid is translucent and free of vegetable residues
+                for accurate transparency index colors.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right: Dashboard & History -->
+        <div class="glass-card dashboard-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div>
+              <h2>Recent Tests</h2>
+              <p id="tests-count">0 tests recorded</p>
+            </div>
+          </div>
+
+          <!-- Graph visualization of history -->
+          <div class="graph-container" id="graph-container">
+            <h4
+              style="font-size: 13px; font-weight: 700; margin-bottom: 12px; color: var(--text-secondary);"
+            >
+              pH Variation Trend
+            </h4>
+            <div style="position: relative;">
+              <svg class="chart-svg" id="chart-svg" viewBox="0 0 400 150">
+                <defs>
+                  <linearGradient
+                    id="chart-gradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop
+                      offset="0%"
+                      stop-color="var(--primary)"
+                      stop-opacity="0.15"></stop>
+                    <stop
+                      offset="100%"
+                      stop-color="var(--primary)"
+                      stop-opacity="0.0"></stop>
+                  </linearGradient>
+                </defs>
+                <!-- Grid Lines -->
+                <line x1="0" y1="20" x2="400" y2="20" class="chart-grid"></line>
+                <line x1="0" y1="75" x2="400" y2="75" class="chart-grid"></line>
+                <line x1="0" y1="130" x2="400" y2="130" class="chart-grid"
+                ></line>
+
+                <!-- Chart Shapes filled via JS -->
+                <path class="chart-area" d=""></path>
+                <path class="chart-line" d=""></path>
+
+                <!-- SVG nodes inserted via JS -->
+                <g id="chart-nodes"></g>
+              </svg>
+              <div class="chart-tooltip" id="chart-tooltip"></div>
+            </div>
+          </div>
+
+          <!-- History Log Entries -->
+          <div class="history-empty" id="history-empty">
+            <div class="history-empty-icon">☕</div>
+            <p>No Tests Yet</p>
+            <p
+              style="font-size: 12px; color: var(--text-tertiary); max-width: 200px; margin-top: 4px;"
+            >
+              Your pH test history will appear here after you analyze your first
+              sample.
+            </p>
+          </div>
+
+          <div class="history-list" id="history-list">
+            <!-- items generated via JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- pH SCALE GUIDE SECTION -->
+      <section
+        id="guide"
+        class="why-section"
+        style="border-top: 1px solid var(--card-border); padding-top: 60px;"
+      >
+        <div class="why-header">
+          <h2>Red Cabbage pH scale Guide</h2>
+          <p>
+            Extracting the juice of a red cabbage provides a natural pH
+            indicator. It shifts colors according to the pH scale, from highly
+            acidic to highly basic.
+          </p>
+        </div>
+
+        <div class="glass-card" style="padding: 32px; margin-bottom: 60px;">
+          <h4 style="margin-bottom: 12px;">Indicator Color Spectrum</h4>
+          <div class="guide-scale" id="guide-scale">
+            <!-- color steps dynamically filled via JS -->
+          </div>
+          <div
+            style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--text-secondary);"
+          >
+            <span>pH 2.0 (Red / Acidic)</span>
+            <span>pH 7.0 (Purple / Neutral)</span>
+            <span>pH 12.0 (Green-Yellow / Alkaline)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY CHOOSE SECTION -->
+      <section id="how-it-works" class="why-section">
+        <div class="why-header">
+          <h2>Why Choose pH Detection?</h2>
+          <p>
+            Our advanced image recognition technology makes water quality
+            testing accessible and ecological for everyone.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card glass-card">
+            <div class="feature-icon">📈</div>
+            <h3>Track Over Time</h3>
+            <p>
+              Monitor pH levels across different water sources with our smart
+              tagging and history features.
+            </p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🛡️</div>
+            <h3>Safe Water Guidelines</h3>
+            <p>
+              Get instant feedback on whether your water meets biological safety
+              standards for drinking water.
+            </p>
+          </div>
+          <div class="feature-card glass-card">
+            <div class="feature-icon">🌱</div>
+            <h3>Eco-Friendly Testing</h3>
+            <p>
+              Reduce waste by utilizing natural, non-toxic red cabbage extracts
+              instead of standard laboratory chemical test strips.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer id="footer">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="#" class="logo">
+              <div class="logo-icon">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                >
+                  <path
+                    d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="logo-text">pH Detection</div>
+            </a>
+            <p>
+              Analyze water quality instantly using AI-powered image
+              recognition. Keep your water safe and healthy.
+            </p>
+            <p style="font-size: 11px; color: var(--text-tertiary);">
+              Made by Andres Silva and Edwin Rairan.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#how-it-works">How It Works</a></li>
+              <li><a href="#guide">pH Scale Guide</a></li>
+              <li><a href="#">Water Safety Tips</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <ul>
+              <li>
+                <a href="http://127.0.0.1:8000/docs#/" target="_blank"
+                  >API Documentation</a
+                >
+              </li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Connect</h4>
+            <div class="social-links" style="margin-bottom: 16px;">
+              <a
+                href="https://github.com/and3sil4"
+                target="_blank"
+                class="social-icon"><GitHub /></a
+              >
+            </div>
+            <p style="font-size: 12px; color: var(--text-secondary);">
+              Questions? Reach out to us at <strong
+                style="color: var(--text-primary);"
+                >asilva26326@universidadean.edu.co</strong
+              >
+            </p>
+          </div>
+        </div>
+
+        <div class="sub-footer">
+          <div>Committed to environmental sustainability</div>
+          <div>&copy; 2026 pH Detection. All rights reserved.</div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Client-side Interactive Application Logic -->
+    <script>
+      // State variables
+      let uploadedFile = null;
+      let currentAnalysisResult = null;
+      let testHistory = [];
+      let videoStream = null;
+      let configData = null;
+
+      // DOM Elements
+      const themeToggleBtn = document.getElementById("theme-toggle");
+      const themeLightIcon = document.getElementById("theme-light-icon");
+      const themeDarkIcon = document.getElementById("theme-dark-icon");
+
+      const dropZone = document.getElementById("drop-zone");
+      const fileInput = document.getElementById("file-input");
+      const viewerContainer = document.getElementById("viewer-container");
+      const imageCanvas = document.getElementById("image-canvas");
+      const btnResetImage = document.getElementById("btn-reset-image");
+      const resultPanel = document.getElementById("result-panel");
+
+      const btnUseCamera = document.getElementById("btn-use-camera");
+      const cameraBtnContainer = document.getElementById(
+        "camera-btn-container",
+      );
+      const cameraContainer = document.getElementById("camera-container");
+      const cameraVideo = document.getElementById("camera-video");
+      const btnCapture = document.getElementById("btn-capture");
+      const btnCancelCamera = document.getElementById("btn-cancel-camera");
+
+      const phVal = document.getElementById("ph-val");
+      const phGauge = document.getElementById("ph-gauge");
+      const classBadge = document.getElementById("class-badge");
+      const resultDesc = document.getElementById("result-desc");
+      const swatchSampled = document.getElementById("swatch-sampled");
+      const swatchMatched = document.getElementById("swatch-matched");
+      const saveTestForm = document.getElementById("save-test-form");
+      const testTagInput = document.getElementById("test-tag");
+
+      const historyEmpty = document.getElementById("history-empty");
+      const historyList = document.getElementById("history-list");
+      const testsCountText = document.getElementById("tests-count");
+      const graphContainer = document.getElementById("graph-container");
+      const guideScale = document.getElementById("guide-scale");
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", () => {
+        initTheme();
+        loadHistory();
+        fetchConfig();
+      });
+
+      // --- Theme Handling ---
+      function initTheme() {
+        const savedTheme =
+          localStorage.getItem("theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        setTheme(savedTheme);
+
+        themeToggleBtn.addEventListener("click", () => {
+          const currentTheme = document.documentElement.classList.contains(
+            "dark",
+          )
+            ? "dark"
+            : "light";
+          setTheme(currentTheme === "dark" ? "light" : "dark");
+        });
+      }
+
+      function setTheme(theme) {
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+          themeLightIcon.style.display = "block";
+          themeDarkIcon.style.display = "none";
+        } else {
+          document.documentElement.classList.remove("dark");
+          themeLightIcon.style.display = "none";
+          themeDarkIcon.style.display = "block";
+        }
+        localStorage.setItem("theme", theme);
+      }
+
+      // --- Config Fetching & Scale UI ---
+      async function fetchConfig() {
+        try {
+          const res = await fetch("/api/config");
+          if (res.ok) {
+            configData = await res.json();
+            renderScaleGuide(configData.reference_scale);
+          }
+        } catch (err) {
+          console.error("Could not fetch calibration scale details", err);
+        }
+      }
+
+      function renderScaleGuide(scale) {
+        if (!scale || scale.length === 0) return;
+        guideScale.innerHTML = "";
+        scale.forEach((item) => {
+          const step = document.createElement("div");
+          step.className = "guide-scale-step";
+          step.style.backgroundColor = item.color_hex;
+          step.style.width = `${100 / scale.length}%`;
+          step.setAttribute("data-ph", `pH ${item.ph}: ${item.description}`);
+          guideScale.appendChild(step);
+        });
+      }
+
+      // --- Image Upload / Canvas Handlers ---
+      dropZone.addEventListener("click", () => fileInput.click());
+
+      fileInput.addEventListener("change", (e) => {
+        if (e.target.files.length > 0) {
+          handleImageFile(e.target.files[0]);
+        }
+      });
+
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "var(--primary)";
+      });
+
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.style.borderColor = "var(--card-border)";
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "var(--card-border)";
+        if (e.dataTransfer.files.length > 0) {
+          handleImageFile(e.dataTransfer.files[0]);
+        }
+      });
+
+      function handleImageFile(file) {
+        uploadedFile = file;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            setupCanvas(img);
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function setupCanvas(img) {
+        dropZone.style.display = "none";
+        cameraBtnContainer.style.display = "none";
+        viewerContainer.style.display = "flex";
+        resultPanel.style.display = "none";
+
+        const ctx = imageCanvas.getContext("2d");
+
+        // Define clean display constraints
+        const maxCanvasWidth = 600;
+        const scale = Math.min(1, maxCanvasWidth / img.width);
+        imageCanvas.width = img.width * scale;
+        imageCanvas.height = img.height * scale;
+
+        ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+
+        // Retain original reference sizes for correct API calculation
+        imageCanvas.setAttribute("data-orig-width", img.width.toString());
+        imageCanvas.setAttribute("data-orig-height", img.height.toString());
+      }
+
+      // Pixel Interaction Handler
+      imageCanvas.addEventListener("click", async (e) => {
+        if (!uploadedFile) return;
+
+        const rect = imageCanvas.getBoundingClientRect();
+
+        // Current display dimension
+        const displayedWidth = rect.width;
+        const displayedHeight = rect.height;
+
+        // Coordinate calculation inside canvas relative to the original image dimensions
+        const origWidth = parseFloat(
+          imageCanvas.getAttribute("data-orig-width"),
+        );
+        const origHeight = parseFloat(
+          imageCanvas.getAttribute("data-orig-height"),
+        );
+
+        const scaleX = origWidth / displayedWidth;
+        const scaleY = origHeight / displayedHeight;
+
+        const clickX = Math.round((e.clientX - rect.left) * scaleX);
+        const clickY = Math.round((e.clientY - rect.top) * scaleY);
+
+        // Render a visual indicator crosshair on display
+        redrawCanvasWithCrosshair(e.clientX - rect.left, e.clientY - rect.top);
+
+        // Submit details to FastAPI endpoint
+        await analyzePH(clickX, clickY);
+      });
+
+      function redrawCanvasWithCrosshair(x, y) {
+        const ctx = imageCanvas.getContext("2d");
+        // Clear and draw image from scratch
+        const img = new Image();
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, imageCanvas.width, imageCanvas.height);
+
+            // Draw crosshair selector circle
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = "#ffffff";
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, 10, 0, 2 * Math.PI);
+            ctx.strokeStyle = "var(--primary)";
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(uploadedFile);
+      }
+
+      btnResetImage.addEventListener("click", () => {
+        uploadedFile = null;
+        currentAnalysisResult = null;
+        dropZone.style.display = "block";
+        cameraBtnContainer.style.display = "flex";
+        viewerContainer.style.display = "none";
+        resultPanel.style.display = "none";
+        fileInput.value = "";
+      });
+
+      // --- Camera Handlers ---
+      btnUseCamera.addEventListener("click", async () => {
+        try {
+          videoStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: "environment" },
+          });
+          cameraVideo.srcObject = videoStream;
+          cameraContainer.style.display = "block";
+          dropZone.style.display = "none";
+          cameraBtnContainer.style.display = "none";
+        } catch (err) {
+          alert("Could not access camera: " + err.message);
+        }
+      });
+
+      btnCancelCamera.addEventListener("click", () => {
+        stopCamera();
+      });
+
+      function stopCamera() {
+        if (videoStream) {
+          videoStream.getTracks().forEach((track) => track.stop());
+          videoStream = null;
+        }
+        cameraContainer.style.display = "none";
+        dropZone.style.display = "block";
+        cameraBtnContainer.style.display = "flex";
+      }
+
+      btnCapture.addEventListener("click", () => {
+        if (!videoStream) return;
+
+        // Grab current frame onto a virtual canvas
+        const tempCanvas = document.createElement("canvas");
+        tempCanvas.width = cameraVideo.videoWidth;
+        tempCanvas.height = cameraVideo.videoHeight;
+        const tempCtx = tempCanvas.getContext("2d");
+        tempCtx.drawImage(
+          cameraVideo,
+          0,
+          0,
+          tempCanvas.width,
+          tempCanvas.height,
+        );
+
+        // Convert to Blob and handle
+        tempCanvas.toBlob((blob) => {
+          const file = new File([blob], "camera_capture.jpg", {
+            type: "image/jpeg",
+          });
+          handleImageFile(file);
+          stopCamera();
+        }, "image/jpeg");
+      });
+
+      // --- Backend Analysis API Call ---
+      async function analyzePH(x, y) {
+        if (!uploadedFile) return;
+
+        const formData = new FormData();
+        formData.append("x", x);
+        formData.append("y", y);
+        formData.append("file", uploadedFile);
+
+        try {
+          phVal.innerText = "...";
+          resultPanel.style.display = "block";
+
+          const res = await fetch("/api/analyze", {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) {
+            const errData = await res.json();
+            throw new Error(errData.detail || "Analysis request failed.");
+          }
+
+          const data = await res.json();
+          currentAnalysisResult = data;
+          displayResult(data);
+        } catch (err) {
+          alert("Error: " + err.message);
+          phVal.innerText = "-";
+          resultPanel.style.display = "none";
+        }
+      }
+
+      function displayResult(res) {
+        phVal.innerText = res.estimated_ph.toFixed(1);
+
+        // Dynamic Gauge Background color based on standard scales
+        let gaugeColor = "var(--primary)";
+        if (res.estimated_ph < 6.5) {
+          gaugeColor = "var(--ph-acid)";
+        } else if (res.estimated_ph > 7.5) {
+          gaugeColor = "var(--ph-alkaline)";
+        } else {
+          gaugeColor = "var(--ph-neutral)";
+        }
+        phGauge.style.backgroundColor = gaugeColor;
+
+        // Swatches
+        swatchSampled.style.backgroundColor = res.sampled_hex;
+        swatchMatched.style.backgroundColor = res.matched_hex;
+
+        // Label Text
+        classBadge.innerText = res.classification;
+        classBadge.style.backgroundColor = gaugeColor + "1a"; // 10% opacity
+        classBadge.style.color = gaugeColor;
+        classBadge.style.border = `1px solid ${gaugeColor}4d`; // 30% opacity
+
+        resultDesc.innerHTML = `This sample matches the <strong>${res.description}</strong> range of the Red Cabbage color scale calibration. Exact hex match: <code>${res.matched_hex}</code>, Sampled: <code>${res.sampled_hex}</code>`;
+
+        // Autofill input with simple placeholder
+        testTagInput.value = "";
+      }
+
+      // --- Local Storage & Graphing ---
+      function loadHistory() {
+        const saved = localStorage.getItem("ph_test_history");
+        if (saved) {
+          try {
+            testHistory = JSON.parse(saved);
+          } catch (e) {
+            testHistory = [];
+          }
+        }
+        renderHistory();
+      }
+
+      function saveHistory() {
+        localStorage.setItem("ph_test_history", JSON.stringify(testHistory));
+        renderHistory();
+      }
+
+      saveTestForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!currentAnalysisResult) return;
+
+        const tagName = testTagInput.value.trim();
+        if (!tagName) return;
+
+        const newTest = {
+          id: "test_" + Date.now(),
+          name: tagName,
+          ph: currentAnalysisResult.estimated_ph,
+          classification: currentAnalysisResult.classification,
+          sampled_hex: currentAnalysisResult.sampled_hex,
+          matched_hex: currentAnalysisResult.matched_hex,
+          date: new Date().toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+          timestamp: Date.now(),
+        };
+
+        testHistory.unshift(newTest);
+        saveHistory();
+
+        // Clear result preview panel
+        uploadedFile = null;
+        currentAnalysisResult = null;
+        dropZone.style.display = "block";
+        cameraBtnContainer.style.display = "flex";
+        viewerContainer.style.display = "none";
+        resultPanel.style.display = "none";
+        fileInput.value = "";
+      });
+
+      function renderHistory() {
+        testsCountText.innerText = `${testHistory.length} test${testHistory.length === 1 ? "" : "s"} recorded`;
+
+        if (testHistory.length === 0) {
+          historyEmpty.style.display = "flex";
+          historyList.style.display = "none";
+          graphContainer.style.display = "none";
+          return;
+        }
+
+        historyEmpty.style.display = "none";
+        historyList.style.display = "flex";
+
+        // Graph rendering trigger
+        if (testHistory.length >= 2) {
+          graphContainer.style.display = "block";
+          drawHistoryGraph();
+        } else {
+          graphContainer.style.display = "none";
+        }
+
+        historyList.innerHTML = "";
+        testHistory.forEach((item) => {
+          // Color badge based on acidity
+          let badgeColor = "var(--primary)";
+          if (item.ph < 6.5) {
+            badgeColor = "var(--ph-acid)";
+          } else if (item.ph > 7.5) {
+            badgeColor = "var(--ph-alkaline)";
+          } else {
+            badgeColor = "var(--ph-neutral)";
+          }
+
+          const entry = document.createElement("div");
+          entry.className = "history-item";
+          entry.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div class="history-badge">${item.ph.toFixed(1)}</div>
+              <div class="history-info">
+                <h4>${escapeHTML(item.name)}</h4>
+                <p>${item.date} • <span style="color: ${badgeColor}; font-weight:600">${item.classification}</span></p>
+              </div>
+            </div>
+            <div class="history-right">
+              <div class="swatch-circle" style="background-color: ${item.sampled_hex}" title="Sampled: ${item.sampled_hex}"></div>
+              <button class="btn btn-delete" onmouseover="this.style.backgroundColor='rgb(251, 189, 189)'" onmouseout="this.style.backgroundColor='transparent'" data-id="${item.id}" aria-label="Delete entry">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </button>
+            </div>
+          `;
+
+          // Wire up delete event listener
+          entry.querySelector(".btn-delete").addEventListener("click", (e) => {
+            const id = e.currentTarget.getAttribute("data-id");
+            testHistory = testHistory.filter((h) => h.id !== id);
+            saveHistory();
+          });
+
+          historyList.appendChild(entry);
+        });
+      }
+
+      function escapeHTML(str) {
+        return str.replace(
+          /[&<>'"]/g,
+          (tag) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              "'": "&#39;",
+              '"': "&quot;",
+            })[tag] || tag,
+        );
+      }
+
+      // --- SVG Line Graph Engine ---
+      function drawHistoryGraph() {
+        const svg = document.getElementById("chart-svg");
+        const pathLine = svg.querySelector(".chart-line");
+        const pathArea = svg.querySelector(".chart-area");
+        const nodesGroup = document.getElementById("chart-nodes");
+        const tooltip = document.getElementById("chart-tooltip");
+
+        // Grab last 7 samples in chronological order
+        const graphItems = [...testHistory].slice(0, 7).reverse();
+        if (graphItems.length < 2) return;
+
+        // Chart geometry inside 400x150 boundary box
+        const width = 400;
+        const height = 150;
+        const paddingLeft = 30;
+        const paddingRight = 20;
+        const paddingTop = 20;
+        const paddingBottom = 20;
+
+        const chartWidth = width - paddingLeft - paddingRight;
+        const chartHeight = height - paddingTop - paddingBottom;
+
+        // Y-axis spans pH levels from 0 to 14
+        const yMin = 0;
+        const yMax = 14;
+
+        // Generate coordinates
+        const points = graphItems.map((item, index) => {
+          const x =
+            paddingLeft + (index / (graphItems.length - 1)) * chartWidth;
+          // Scale pH value inverse on Y axis (SVG coordinate y=0 is top)
+          const y =
+            paddingTop +
+            chartHeight -
+            ((item.ph - yMin) / (yMax - yMin)) * chartHeight;
+          return { x, y, item };
+        });
+
+        // Compile SVG Path string
+        let dLine = `M ${points[0].x} ${points[0].y}`;
+        for (let i = 1; i < points.length; i++) {
+          dLine += ` L ${points[i].x} ${points[i].y}`;
+        }
+
+        let dArea = `${dLine} L ${points[points.length - 1].x} ${paddingTop + chartHeight} L ${points[0].x} ${paddingTop + chartHeight} Z`;
+
+        pathLine.setAttribute("d", dLine);
+        pathArea.setAttribute("d", dArea);
+
+        // Clear old dots and build interactive nodes
+        nodesGroup.innerHTML = "";
+        points.forEach((pt) => {
+          const circle = document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "circle",
+          );
+          circle.setAttribute("cx", pt.x.toString());
+          circle.setAttribute("cy", pt.y.toString());
+          circle.setAttribute("r", "6");
+          circle.setAttribute("class", "chart-dot");
+
+          let color = "var(--primary)";
+          if (pt.item.ph < 6.5) color = "var(--ph-acid)";
+          else if (pt.item.ph > 7.5) color = "var(--ph-alkaline)";
+          else color = "var(--ph-neutral)";
+          circle.style.stroke = color;
+
+          // Tooltip hover actions
+          circle.addEventListener("mouseover", (e) => {
+            tooltip.style.opacity = "1";
+            tooltip.innerHTML = `<strong>${escapeHTML(pt.item.name)}</strong><br/>pH: ${pt.item.ph.toFixed(1)} (${pt.item.classification})`;
+
+            const rect = svg.getBoundingClientRect();
+            // Offset positioning
+            tooltip.style.left = `${(pt.x / width) * rect.width - 40}px`;
+            tooltip.style.top = `${(pt.y / height) * rect.height - 50}px`;
+          });
+
+          circle.addEventListener("mouseout", () => {
+            tooltip.style.opacity = "0";
+          });
+
+          nodesGroup.appendChild(circle);
+        });
+      }
+    </script>
+  </body>
+</html>
